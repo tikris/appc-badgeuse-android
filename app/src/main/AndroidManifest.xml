@@ -12,11 +12,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Géolocalisation en arrière-plan pour le geofencing (affichage automatique sur écran verrouillé) -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-    <!-- Notifications pour l'alerte à proximité sur Android 13+ -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Version 1 sans notification de proximité (AppConfig.PROXIMITY_NOTIFICATION) : ni localisation en
+         arrière-plan (ACCESS_BACKGROUND_LOCATION), ni notifications (POST_NOTIFICATIONS). À rajouter avec
+         la demande à l'exécution, l'avertissement visible et la déclaration Google Play. -->
 
     <application
         android:name=".BadgeCrecheApp"

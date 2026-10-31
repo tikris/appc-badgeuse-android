@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fr.parentsapariscentre.badgecreche.AppConfig
 import fr.parentsapariscentre.badgecreche.data.model.BadgeData
 import fr.parentsapariscentre.badgecreche.ui.components.BadgeCard
 import fr.parentsapariscentre.badgecreche.ui.theme.AppcNavy
@@ -92,7 +93,7 @@ fun BadgeHomeScreen(
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
             title = { Text("Supprimer le badge ?") },
-            text = { Text("Le badge sera effacé de votre téléphone ainsi que de votre widget et des notifications.") },
+            text = { Text("Le badge sera effacé de votre téléphone et du widget.") },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -123,7 +124,9 @@ private fun TipsSection(badge: BadgeData) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         val meters = badge.lockScreenDistance.meters
-        if (meters != null) {
+        if (!AppConfig.PROXIMITY_NOTIFICATION) {
+            // Version 1 : pas de notification de proximité, rien à signaler ici.
+        } else if (meters != null) {
             TipRow(
                 icon = Icons.Default.LocationOn,
                 text = "Notification automatique devant la crèche à $meters m (avec la localisation activée)."
