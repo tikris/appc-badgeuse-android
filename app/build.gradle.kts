@@ -86,19 +86,17 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
 
-    // CameraX + ML Kit (Scan de QR code en direct)
+    // CameraX (scan en direct) ; lecture du QR code par ZXing, entièrement sur le téléphone
     val cameraxVersion = "1.4.0"
     implementation("androidx.camera:camera-core:$cameraxVersion")
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
-    implementation("androidx.camera:camera-mlkit-vision:$cameraxVersion")
-    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1")
 
     // Localisation & Geofencing (suggestions de crèches proches + notification écran verrouillé)
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
-    // Génération du QR code hors ligne
+    // Génération et lecture du QR code hors ligne
     implementation("com.google.zxing:core:3.5.3")
 
     // Widget écran d'accueil (Jetpack Glance)

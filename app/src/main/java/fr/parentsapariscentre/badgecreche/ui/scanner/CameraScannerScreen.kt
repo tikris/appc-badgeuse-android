@@ -45,9 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
+import fr.parentsapariscentre.badgecreche.service.QrCodeReading
 import fr.parentsapariscentre.badgecreche.ui.theme.AppcCoral
 import java.util.concurrent.Executors
 
@@ -113,34 +111,36 @@ fun CameraScannerScreen(
                                 it.surfaceProvider = previewView.surfaceProvider
                             }
 
-                            val scanner = BarcodeScanning.getClient()
                             val imageAnalysis = ImageAnalysis.Builder()
                                 .setTargetResolution(Size(1280, 720))
                                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                                 .build()
 
                             imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                                val mediaImage = imageProxy.image
-                                if (mediaImage != null && !isDetected) {
-                                    val image = InputImage.fromMediaImage(
-                                        mediaImage,
-                                        imageProxy.imageInfo.rotationDegrees
-                                    )
-                                    scanner.process(image)
-                                        .addOnSuccessListener { barcodes ->
-                                            val qr = barcodes.firstOrNull { it.format == Barcode.FORMAT_QR_CODE }
-                                            val raw = qr?.rawValue
-                                            if (!raw.isNullOrBlank() && !isDetected) {
-                                                isDetected = true
-                                                previewView.post {
-                                                    onScanned(raw)
-                                                }
+                                try {
+                                    if (!isDetected) {
+                                        // Plan Y (luminance) recopié ligne par ligne : la largeur de
+                                        // ligne en mémoire (rowStride) peut dépasser celle de l'image.
+                                        val plane = imageProxy.planes[0]
+                                        val buffer = plane.buffer
+                                        val width = imageProxy.width
+                                        val height = imageProxy.height
+                                        val luminance = ByteArray(width * height)
+                                        for (row in 0 until height) {
+                                            buffer.position(row * plane.rowStride)
+                                            buffer.get(luminance, row * width, width)
+                                        }
+                                        val raw = QrCodeReading.fromLuminance(width, height, luminance)
+                                        if (!raw.isNullOrBlank() && !isDetected) {
+                                            isDetected = true
+                                            previewView.post {
+                                                onScanned(raw)
                                             }
                                         }
-                                        .addOnCompleteListener {
-                                            imageProxy.close()
-                                        }
-                                } else {
+                                    }
+                                } catch (e: Exception) {
+                                    // Image illisible : la suivante sera analysée.
+                                } finally {
                                     imageProxy.close()
                                 }
                             }
