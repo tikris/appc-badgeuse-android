@@ -6,11 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.ParcelFileDescriptor
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import kotlin.math.max
@@ -44,18 +40,10 @@ object QRCodeDecoder {
 
     suspend fun decodeFromBitmap(bitmap: Bitmap): DecodeResult = withContext(Dispatchers.Default) {
         try {
-            val scanner = BarcodeScanning.getClient()
-            val image = InputImage.fromBitmap(bitmap, 0)
-            val barcodes = scanner.process(image).await()
-
-            val qrCode = barcodes.firstOrNull { it.format == Barcode.FORMAT_QR_CODE }
-            val rawValue = qrCode?.rawValue
-
-            if (!rawValue.isNullOrBlank()) {
-                DecodeResult.Success(rawValue)
-            } else {
-                DecodeResult.NoQrCode
-            }
+            val pixels = IntArray(bitmap.width * bitmap.height)
+            bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+            val payload = QrCodeReading.fromPixels(bitmap.width, bitmap.height, pixels)
+            if (payload != null) DecodeResult.Success(payload) else DecodeResult.NoQrCode
         } catch (e: Exception) {
             DecodeResult.Error(e.localizedMessage ?: "Erreur d'analyse de l'image.")
         }

@@ -1,6 +1,6 @@
 name: Android
 
-# Compile l'app à chaque modification : APK de debug, bundle de publication (.aab) et contrôles
+# Teste et compile l'app à chaque modification : tests unitaires, APK de debug, bundle (.aab) et contrôles
 # bloquants de Google (lint « vital »). Lancement manuel : le bundle est conservé 7 jours.
 #
 # Signature de publication (facultative ici) : secrets ANDROID_UPLOAD_KEYSTORE (fichier .jks en
@@ -43,7 +43,7 @@ jobs:
             echo "Pas de clé d'envoi : bundle non signé."
           fi
           chmod +x gradlew
-          ./gradlew --no-daemon assembleDebug bundleRelease
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug bundleRelease
           rm -f "$RUNNER_TEMP/upload.jks"
           ls -l app/build/outputs/bundle/release/
       - name: Bundle de publication (lancement manuel)

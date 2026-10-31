@@ -100,11 +100,10 @@ Application indépendante, non affiliée à la Ville de Paris ni aux gestionnair
 | Application d'actualités, santé, finance, gouvernement | Non (application indépendante) |
 | Sécurité des données | Voir ci-dessous |
 
-**Sécurité des données**
+**Sécurité des données** : *« Votre application collecte-t-elle ou partage-t-elle des types de données utilisateur obligatoires ? » → **Non***.
 - La position sert seulement sur le téléphone, à trier les crèches. Elle n'est ni transmise ni enregistrée : au sens de Google, elle n'est pas « collectée ».
-- Les statistiques Matomo sont désactivées (`AppConfig.STATS_ENDPOINT` vide).
-- Le scanner ML Kit (Google Play Services) envoie à Google des **diagnostics** : modèle d'appareil, version d'Android, mesures de performance et codes d'erreur, chiffrés en transit et non transmis à des tiers ([détail](https://developers.google.com/ml-kit/android-data-disclosure)). Tant qu'il est utilisé, déclarez : *Informations et performances de l'appli → Diagnostics : collectées, non partagées, finalité Analyse*. Vérifiez sur la page de Google la ligne « Identifiants de l'appareil ».
-- Si le scan passe à ZXing, déjà utilisé pour dessiner le QR code et entièrement local : *aucune donnée collectée ni partagée*.
+- Le QR code est lu par ZXing, entièrement sur le téléphone. Aucun SDK n'envoie de données : ML Kit a été retiré, puisqu'il transmettait des diagnostics à Google.
+- Les statistiques Matomo sont désactivées (`AppConfig.STATS_ENDPOINT` vide). Si elles sont branchées un jour, mettez à jour ce formulaire.
 
 ## 6. Demande d'accès à la production
 

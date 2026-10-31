@@ -6,7 +6,7 @@ Version Android de l'application **Badge Crèche** de l'association **Parents à
 - **Notification de proximité automatique sur l'écran verrouillé** dès l'arrivée devant la crèche (10 m, 25 m, 50 m ou désactivée).
 - **Tuile dans les Paramètres Rapides (Quick Settings)** accessible d'un glissement depuis le haut de l'écran, y compris écran verrouillé.
 - **Widget sur l'écran d'accueil** (conçu avec Jetpack Glance) affichant directement le QR code et les informations choisies.
-- **Scanner intégré** avec CameraX & ML Kit : scan en direct de la caméra, sélection depuis la galerie/photos ou importation de fichier (PDF, image).
+- **Scanner intégré** avec CameraX et ZXing, entièrement sur le téléphone : scan en direct de la caméra, sélection depuis la galerie/photos ou importation de fichier (PDF, image).
 - **Annuaire des 1 176 crèches parisiennes** embarqué (`app/src/main/assets/creches-paris.json`, sous licence ODbL) : recherche instantanée tolérante aux fautes/accents et tri automatique par proximité GPS.
 - **100 % local et respectueux de la vie privée** : le QR code, le nom de l'enfant et la position ne quittent jamais le smartphone. Les données sont stockées localement et exclues des sauvegardes cloud.
 
@@ -17,7 +17,7 @@ Version Android de l'application **Badge Crèche** de l'association **Parents à
 L'application est développée selon les meilleures pratiques Android modernes :
 
 - **UI déclarative** : Jetpack Compose & Material 3 avec support Edge-to-Edge.
-- **Scan de QR code** : CameraX + Google Play Services ML Kit Barcode Scanning + décodage haute résolution de PDF avec `PdfRenderer`.
+- **Scan de QR code** : CameraX + ZXing (`service/QrCodeReading.kt`, testé sur la JVM), sans aucun envoi de données, et décodage haute résolution de PDF avec `PdfRenderer`.
 - **Rendu du QR code** : Génération matricielle hors-ligne avec ZXing Core (haute netteté et contraste optimal pour les badgeuses).
 - **Localisation & Geofencing** : Google Play Services Location (`FusedLocationProviderClient` et `GeofencingClient`) pour déclencher la notification à l'arrivée devant la crèche sans impacter la batterie.
 - **Widget écran d'accueil** : Jetpack Glance AppWidget (Material 3).
