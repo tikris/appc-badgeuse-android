@@ -11,3 +11,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Fichiers de signature sensibles
+*.jks
+*.keystore
+keystore.properties
