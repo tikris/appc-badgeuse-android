@@ -107,7 +107,11 @@ fun WelcomeScreen(
         StepRow(
             icon = Icons.Default.Widgets,
             title = "Accédez-y en 1 geste",
-            description = "Par notification automatique à proximité, widget sur l'écran d'accueil ou tuile rapide."
+            description = if (AppConfig.PROXIMITY_NOTIFICATION) {
+                "Par notification automatique à proximité, widget sur l'écran d'accueil ou tuile rapide."
+            } else {
+                "Par le widget sur l'écran d'accueil ou la tuile des réglages rapides."
+            }
         )
 
         Spacer(modifier = Modifier.height(36.dp))

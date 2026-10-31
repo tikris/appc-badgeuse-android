@@ -25,6 +25,11 @@ object AppConfig {
     const val LEGAL_REGISTRATION = "Association loi 1901 – n° RNA en cours d'attribution"
     const val PUBLICATION_DIRECTOR = "Christophe Amalric, président de l'APPC"
 
+    // MARK: Notification de proximité (géorepérage)
+    // Désactivée en version 1 : elle exige la localisation en arrière-plan, que Google Play n'accepte
+    // qu'après formulaire, vidéo et avertissement visible dans l'app. Le code reste en place (GeofenceManager).
+    const val PROXIMITY_NOTIFICATION = false
+
     // MARK: Statistiques facultatives (Matomo auto-hébergé, voir MATOMO.md)
     val STATS_ENDPOINT: String? = null
     const val STATS_SITE_ID = 1

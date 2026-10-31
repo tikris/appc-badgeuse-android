@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat
 import fr.parentsapariscentre.badgecreche.data.model.Creche
 import fr.parentsapariscentre.badgecreche.data.model.CrecheAddress
 import fr.parentsapariscentre.badgecreche.data.model.CrecheStat
+import fr.parentsapariscentre.badgecreche.AppConfig
 import fr.parentsapariscentre.badgecreche.data.model.LockScreenDistance
 import fr.parentsapariscentre.badgecreche.data.model.NearbyCreche
 import fr.parentsapariscentre.badgecreche.data.repository.CrecheCatalogRepository
@@ -120,7 +121,7 @@ fun CrecheSection(
                 // Crèche sélectionnée : Carte + Coordonnées + Réglages
                 AddressMap(
                     address = address,
-                    distance = lockScreenDistance,
+                    distance = if (AppConfig.PROXIMITY_NOTIFICATION) lockScreenDistance else LockScreenDistance.NEVER,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
@@ -139,18 +140,20 @@ fun CrecheSection(
                     )
                 }
 
-                // Bouton réglage de l'écran verrouillé
-                OutlinedButton(
-                    onClick = { showLockScreenDialog = true },
-                    modifier = Modifier.fillMaxWidth().height(44.dp),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Icon(Icons.Default.Lock, contentDescription = null, tint = AppcCoral, modifier = Modifier.size(18.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Écran verrouillé : ${lockScreenDistance.title}",
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                // Bouton réglage de l'écran verrouillé (notification de proximité, désactivée en version 1)
+                if (AppConfig.PROXIMITY_NOTIFICATION) {
+                    OutlinedButton(
+                        onClick = { showLockScreenDialog = true },
+                        modifier = Modifier.fillMaxWidth().height(44.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Icon(Icons.Default.Lock, contentDescription = null, tint = AppcCoral, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Écran verrouillé : ${lockScreenDistance.title}",
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
 
                 // Bouton proposer nom d'usage

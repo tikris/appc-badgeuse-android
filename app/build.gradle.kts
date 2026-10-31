@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "fr.parentsapariscentre.badgecreche"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "fr.parentsapariscentre.badgecreche"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -22,8 +22,25 @@ android {
         }
     }
 
+    // Signature de publication (clé d'envoi Google Play) : fournie par la CI via des variables
+    // d'environnement, jamais commitée. Sans elles, le bundle release est produit non signé.
+    val uploadKeystore = System.getenv("ANDROID_KEYSTORE_PATH")
+    signingConfigs {
+        if (uploadKeystore != null) {
+            create("upload") {
+                storeFile = file(uploadKeystore)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (uploadKeystore != null) {
+                signingConfig = signingConfigs.getByName("upload")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

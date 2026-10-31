@@ -1,0 +1,55 @@
+name: Android
+
+# Compile l'app à chaque modification : APK de debug, bundle de publication (.aab) et contrôles
+# bloquants de Google (lint « vital »). Lancement manuel : le bundle est conservé 7 jours.
+#
+# Signature de publication (facultative ici) : secrets ANDROID_UPLOAD_KEYSTORE (fichier .jks en
+# base64), ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD. Sans eux, le
+# bundle est produit non signé.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Compilation (debug et bundle de publication)
+        env:
+          ANDROID_UPLOAD_KEYSTORE: ${{ secrets.ANDROID_UPLOAD_KEYSTORE }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -n "$ANDROID_UPLOAD_KEYSTORE" ]; then
+            printf '%s' "$ANDROID_UPLOAD_KEYSTORE" | tr -d ' \t\r\n' | base64 --decode > "$RUNNER_TEMP/upload.jks"
+            export ANDROID_KEYSTORE_PATH="$RUNNER_TEMP/upload.jks"
+            echo "Bundle signé avec la clé d'envoi."
+          else
+            echo "Pas de clé d'envoi : bundle non signé."
+          fi
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug bundleRelease
+          rm -f "$RUNNER_TEMP/upload.jks"
+          ls -l app/build/outputs/bundle/release/
+      - name: Bundle de publication (lancement manuel)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: badge-creche-aab
+          path: app/build/outputs/bundle/release/*.aab
+          retention-days: 7

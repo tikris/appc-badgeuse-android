@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                 fun saveBadge(newBadge: BadgeData) {
                     scope.launch {
                         repository.saveBadge(newBadge)
-                        geofenceManager.updateGeofence(newBadge)
+                        if (AppConfig.PROXIMITY_NOTIFICATION) geofenceManager.updateGeofence(newBadge)
                         BadgeAppWidget().updateAll(applicationContext)
                         isEditing = false
                     }
@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                 fun deleteBadge() {
                     scope.launch {
                         repository.deleteBadge()
-                        geofenceManager.updateGeofence(null)
+                        if (AppConfig.PROXIMITY_NOTIFICATION) geofenceManager.updateGeofence(null)
                         BadgeAppWidget().updateAll(applicationContext)
                     }
                 }
