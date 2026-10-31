@@ -1,0 +1,8 @@
+<resources>
+    <color name="appc_coral">#FF7A59</color>
+    <color name="appc_coral_dark">#FF8A6B</color>
+    <color name="appc_navy">#22305A</color>
+    <color name="appc_label">#FFB096</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>

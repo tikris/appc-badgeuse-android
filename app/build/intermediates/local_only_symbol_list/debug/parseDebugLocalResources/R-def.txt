@@ -1,0 +1,19 @@
+R_DEF: Internal format may change without notice
+local
+color appc_coral
+color appc_coral_dark
+color appc_label
+color appc_navy
+color black
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable ic_tile_badge
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string tile_label
+string widget_name
+style Theme.BadgeCreche
+xml badge_widget_info
+xml data_extraction_rules
