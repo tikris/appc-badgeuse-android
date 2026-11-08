@@ -7,7 +7,9 @@ name: Android
 # base64), ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD. Sans eux, le
 # bundle est produit non signé.
 on:
+  # Branches : la CI tourne via la pull request (une seule compilation par commit, pas deux).
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
