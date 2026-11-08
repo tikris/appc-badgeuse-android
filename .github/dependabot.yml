@@ -1,0 +1,32 @@
+# Mises à jour automatiques proposées en pull request, une fois par semaine, regroupées pour limiter le bruit.
+# Chaque proposition passe par la CI (tests, compilation, lint « vital » de Google).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Europe/Paris
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "CI"
+
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    groups:
+      androidx:
+        patterns: ["androidx.*"]
+      kotlin:
+        patterns: ["org.jetbrains.kotlin*", "org.jetbrains.kotlinx*"]
+      autres:
+        patterns: ["*"]
+    commit-message:
+      prefix: "Dépendances"
