@@ -49,9 +49,9 @@ Gardez une copie de `upload.jks` hors du dépôt. Lors du premier envoi, accepte
 
 ## 4. Fiche du Store (*Développer la présence sur le Store → Fiche principale*)
 
-**Nom de l'application** (30 car. max)
+**Nom de l'application** (30 car. max), le même que sur l'App Store : une seule recherche à donner aux parents, sur le prospectus comme à l'oral. Sous l'icône, le téléphone affiche toujours « Badge Crèche ».
 ```
-Badge Crèche – APPC
+Badgeuse Crèche – APPC
 ```
 
 **Description courte** (80 car. max)
